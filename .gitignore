@@ -2,6 +2,10 @@
 # The committed copy is docs/RESEARCH-PLAN.md.
 /credential-plugin-fork-research-plan.md
 
+# Local research status board. Deliberately untracked: it is a working view of
+# project state, not a source artifact, and it would rot against every commit.
+/docs/status.html
+
 # Built plugin binary and release artifacts
 /spire-credentialcomposer-adpkinit
 /dist/
