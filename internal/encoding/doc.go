@@ -1,10 +1,31 @@
-// Package encoding will hold the phase-1 DER builders for the two target
-// extensions. Nothing may be implemented here until known-good fixtures
-// exist (a real ADCS-issued certificate or an authoritative Microsoft test
-// vector): the exact bytes the target KDC accepts must be pinned by golden
-// tests, not inferred from documentation. Builders also require
-// malformed-input, duplicate-extension, and fuzz tests before the plugin
-// may call them.
+// Package encoding holds the phase-1 DER builders for the two target
+// extensions.
+//
+// # Verification standard
+//
+// A builder may only be wired into the plugin once its exact output bytes
+// are pinned by a golden test against an authority independent of this
+// package, and it carries malformed-input and fuzz tests. The two
+// extensions have different authorities available, so they are at
+// different stages:
+//
+//   - CRL Distribution Points is specified by RFC 5280 §4.2.1.13 and is
+//     already implemented by crypto/x509. The golden test builds a real
+//     certificate with x509.CreateCertificate and compares byte-for-byte
+//     against the extension the standard library emits, so the encoding is
+//     verified against a working implementation rather than against prose.
+//
+//   - The AD SID security extension has no such reference implementation.
+//     Its encoding must NOT be inferred from documentation, from the OID,
+//     or from a description of the structure. The bytes must come from a
+//     real ADCS-issued certificate or an authoritative Microsoft test
+//     vector, and a golden test must pin them. Until that fixture exists,
+//     the extension builder stays unimplemented — see docs/FIXTURES.md for
+//     how to obtain one.
+//
+// The SID codec in this package is the primitive underneath that extension
+// (the binary SID layout from MS-DTYP), not the extension itself. It is
+// verifiable on its own terms and does not depend on the pending fixture.
 package encoding
 
 import "encoding/asn1"
