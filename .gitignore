@@ -1,0 +1,17 @@
+# Original planning note (contains a work-internal reference).
+# The committed copy is docs/RESEARCH-PLAN.md.
+/credential-plugin-fork-research-plan.md
+
+# Built plugin binary and release artifacts
+/spire-credentialcomposer-adpkinit
+/dist/
+coverage.out
+
+# Never commit key material or real certificates; synthetic test fixtures
+# under */testdata/ must be re-allowed explicitly when phase 1 adds them.
+*.key
+*.pem
+*.pfx
+*.p12
+*.crt
+*.der
