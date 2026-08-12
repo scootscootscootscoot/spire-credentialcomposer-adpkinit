@@ -179,7 +179,9 @@ Keep private keys, production certificates, AD exports, and sensitive mappings o
 
 1. What exact SPIRE release and SDK version will be supported?
 2. What authoritative system owns the SPIFFE ID → AD SID registry?
-3. Which component issues and publishes the CRL referenced by the CDP?
+3. What can **sign** a CRL covering SPIRE-issued leaves, given that SPIRE does not issue
+   CRLs at all? Hosting and publication are downstream of that and currently moot. See
+   `docs/findings/2026-08-12-ca-chaining-and-revocation.md`.
 4. Does the target KDC accept the chosen SID extension encoding and CRL behavior at the required patch level?
 5. Does the target SPIRE release preserve/merge `extra_extensions` as expected on renewal?
 6. Are only workload SVIDs in scope, or are agent/server certificates also needed?
@@ -187,6 +189,10 @@ Keep private keys, production certificates, AD exports, and sensitive mappings o
 8. Who owns the fork indefinitely, including upstream tracking, security review, releases, and incident response?
 9. What is the approved short-lived TTL, and how are KDC/AD replication and caching accounted for?
 10. Which governance approvals are required before any lab is connected to enterprise AD?
+11. Does `NTAuthCertificates` accept a root CA, or must the direct issuing CA be
+    published? If the latter, what is the republication procedure on SPIRE CA rotation,
+    and how long is the issuance blackout during AD replication? See
+    `docs/findings/2026-08-12-ca-chaining-and-revocation.md`.
 
 ## 9. Initial recommendation
 
