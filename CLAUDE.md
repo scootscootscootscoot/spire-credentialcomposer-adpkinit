@@ -49,7 +49,8 @@ owner's day job. Related-but-separate: the home-lab SPIRE fleet rollout at
 |---|---|
 | 2026-08-12 | Clean plugin in own repo (not a fork of `spiffe/spire-credentialcomposer-cel`). Reuse only the standard plugin-SDK serve/config pattern. Engage upstream issue #3 ("x509 support") with findings once we have something real to show. |
 | 2026-08-12 | Mapping design: plugin consumes a **local mapping snapshot** (versioned, schema-validated, freshness-checked); snapshot *production* is a separate pluggable concern — GitOps pipeline first, AD-attribute sync controller later. See "Mapping architecture". |
-| 2026-08-12 | Phase 4–5 lab: Windows Server eval VM under KVM **on this machine** (`/dev/kvm` verified). Not built yet — do not build before phase 2 exits. |
+| 2026-08-12 | Phase 4–5 lab: Windows Server eval VM under KVM **on this machine** (`/dev/kvm` verified). ~~Not built yet — do not build before phase 2 exits.~~ **Superseded same day (below).** |
+| 2026-08-12 | Lab built early, by owner decision, scoped to open decision 11 only. The "not before phase 2" gate assumed the lab needed the plugin to be useful; it does not — the NTAuth root-vs-issuer question is a property of AD and is exercised by any two-level openssl chain. Scope is one VM (`lab/`), no ADCS, no SPIRE. Do not let it grow into general phase-4 work before phase 2 exits. |
 | 2026-08-12 | Private GitHub repo until IP review. |
 | 2026-08-12 | Pins: SPIRE v1.15.2, spire-plugin-sdk v1.15.2, Go 1.26.5. Matches latest SPIRE release and the home-fleet plan. |
 
