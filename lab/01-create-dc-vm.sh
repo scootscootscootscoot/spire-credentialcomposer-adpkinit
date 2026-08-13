@@ -67,15 +67,19 @@ if ! virsh -c qemu:///system net-dumpxml default | grep -q "${DC_MAC}"; then
 		--live --config
 fi
 
-# osinfo-db on Ubuntu 24.04 predates Server 2025. The variant only seeds
-# defaults we are overriding anyway, so fall back rather than fail.
-OS_VARIANT="win2k22"
+# Ask virt-install rather than osinfo-query: the latter lives in libosinfo-bin,
+# which --no-install-recommends does not pull in, and its absence would silently
+# select the fallback instead of the right variant. The variant only seeds
+# defaults we mostly override, so degrading is acceptable — doing so unknowingly
+# is not.
+OS_VARIANT=""
 for candidate in win2k25 win2k22 win2k19; do
-	if osinfo-query os short-id="${candidate}" 2>/dev/null | grep -q "${candidate}"; then
+	if virt-install --osinfo list 2>/dev/null | grep -qx "${candidate}"; then
 		OS_VARIANT="${candidate}"
 		break
 	fi
 done
+[[ -n ${OS_VARIANT} ]] || die "no usable Windows os-variant found in the libosinfo database"
 echo "using --os-variant ${OS_VARIANT}"
 
 virt-install \
