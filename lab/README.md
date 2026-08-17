@@ -81,16 +81,34 @@ regardless of what NTAuth contains. NTAuth membership is then the only variable.
 `R` = root, `I1` = first intermediate, `I2` = a second intermediate under the same root
 standing in for a rotated SPIRE CA. `I2` is never published to NTAuth.
 
-| # | In `NTAuthCertificates` | Leaf issued by | Purpose |
-|---|---|---|---|
-| A | `I1` | `I1` | baseline — proves the rig works before anything is concluded |
-| B | `R` only | `I1` | **the question** |
-| C | neither | `I1` | negative control — must fail, or the rig proves nothing |
-| D | `R` + `I1` | `I1` | control for interference between the two |
-| E | `R` only | `I2` | **the operationally decisive row** — a rotated issuer under a published root |
-| F | `I1` only | `I2` | if B fails, confirms republication is genuinely required |
+| # | In `NTAuthCertificates` | Leaf issued by | Purpose | Result |
+|---|---|---|---|---|
+| A | `I1` | `I1` | baseline — proves the rig works before anything is concluded | **PASS** |
+| B | `R` only | `I1` | **the question** | FAIL |
+| C | neither (`I2`) | `I1` | negative control — must fail, or the rig proves nothing | FAIL |
+| D | `R` + `I1` | `I1` | control for interference between the two | **PASS** |
+| E | `R` only | `I2` | **the operationally decisive row** — a rotated issuer under a published root | FAIL |
+| F | `I1` only | `I2` | if B fails, confirms republication is genuinely required | FAIL |
+| G | `I2` | `I2` | baseline for `I2` — added 2026-08-17, see below | **PASS** |
 
 Row A must pass and row C must fail before any other row is believed.
+
+**Answered 2026-08-17: the direct issuing CA must be published; a root is neither
+necessary nor sufficient.** A row passes iff the leaf's immediate issuer is in NTAuth.
+Row E fails, so the cheap "publish the root once and let SPIRE rotate freely" outcome
+below is *not available* — read
+`../docs/findings/2026-08-17-ntauth-requires-direct-issuer.md` for the full result and
+its consequences. Run rows with `lab/03-run-row.sh <A-G>`.
+
+**Row G was added because the original six had a gap.** Rows E and F both rest on a
+`leaf-i2` that never succeeds anywhere in the matrix, so their failures could not be
+attributed to NTAuth rather than to a broken leaf — `0x3E` (client not trusted) is
+suggestive but not proof, since the KDC may evaluate trust before mapping and never
+reach it. G is the `I2` mirror of row A; it passes, which closes the gap. Row C likewise
+substitutes `{I2}` for an empty NTAuth: AD will not produce an empty one, because
+`cACertificate` is `systemMustContain` on the `certificationAuthority` class. `{I2}`
+satisfies "neither" and is a stronger control than empty — it shows the KDC checks
+*which* CA is present, not merely whether NTAuth is populated.
 
 Row E is the one that decides the project. If it passes, publish the internal root once
 and let SPIRE rotate freely — at the cost of blast radius, since everything that root

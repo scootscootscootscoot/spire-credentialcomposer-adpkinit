@@ -53,6 +53,7 @@ owner's day job. Related-but-separate: the home-lab SPIRE fleet rollout at
 | 2026-08-12 | Lab built early, by owner decision, scoped to open decision 11 only. The "not before phase 2" gate assumed the lab needed the plugin to be useful; it does not — the NTAuth root-vs-issuer question is a property of AD and is exercised by any two-level openssl chain. Scope is one VM (`lab/`), no ADCS, no SPIRE. Do not let it grow into general phase-4 work before phase 2 exits. |
 | 2026-08-12 | Private GitHub repo until IP review. |
 | 2026-08-12 | Pins: SPIRE v1.15.2, spire-plugin-sdk v1.15.2, Go 1.26.5. Matches latest SPIRE release and the home-fleet plan. |
+| 2026-08-17 | **Open decision 11 answered: `NTAuthCertificates` requires the direct issuing CA.** A root is neither necessary nor sufficient — a leaf authenticates iff its immediate issuer is published. Seven-row matrix, both controls behaving; see `docs/findings/2026-08-17-ntauth-requires-direct-issuer.md`. The decisive row (rotated issuer under a published root) **fails**, so SPIRE CA rotation costs an AD write plus a replication wait every time, at forest-configuration privilege. The "publish the root once, rotate freely" model does not exist. No composer change can affect this. |
 
 ## Mapping architecture (the "massive org" answer)
 
