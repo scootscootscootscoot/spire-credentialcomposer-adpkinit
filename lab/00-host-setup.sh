@@ -29,6 +29,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
 	qemu-system-x86 \
+	qemu-system-modules-spice \
 	qemu-utils \
 	libvirt-daemon-system \
 	libvirt-clients \

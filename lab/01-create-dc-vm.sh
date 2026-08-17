@@ -92,11 +92,20 @@ virt-install \
 	--disk "path=${POOL_DIR}/${VM_NAME}.qcow2,size=${VM_DISK_GB},format=qcow2,bus=sata" \
 	--disk "path=${POOL_DIR}/${WINDOWS_ISO},device=cdrom,bus=sata,readonly=on" \
 	"${VIRTIO_DISK[@]}" \
+	`# --cdrom would pick bus=ide over the sata requirement above; this keeps sata` \
+	--install bootdev=cdrom \
 	--network "network=default,model=e1000e,mac=${DC_MAC}" \
 	--graphics spice,listen=127.0.0.1 \
 	--video qxl \
 	--boot cdrom,hd \
-	--noautoconsole
+	--noautoconsole \
+	--wait -1 &
+# --wait keeps this backgrounded virt-install alive to catch Windows Setup's
+# first internal reboot and flip the persistent boot order to hd-only. Without
+# it, --noautoconsole returns immediately and libvirt just shuts the domain
+# off at that reboot instead of continuing — recoverable with a plain
+# `virsh start`, but avoid it going forward.
+disown
 
 cat <<EOF
 
