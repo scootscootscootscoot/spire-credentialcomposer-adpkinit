@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Host preparation for the phase-4 lab. Run once, on labhost.
+# Host preparation for the phase-4 lab. Run once, on the lab host.
 #
-# This is the only step that needs root. Everything after it runs as the lab operator.
+# This is the only step that needs root. Everything after it runs as the
+# unprivileged lab operator.
 #
 #   sudo lab/00-host-setup.sh
 #
@@ -42,7 +43,8 @@ apt-get install -y --no-install-recommends \
 
 systemctl enable --now libvirtd
 
-# qemu runs as libvirt-qemu and cannot traverse /home/labop (mode 0750), so
+# qemu runs as libvirt-qemu and cannot traverse the operator's home directory
+# (mode 0750), so
 # disks and ISOs live in the default pool. Grant the lab operator write access
 # there rather than requiring sudo for every image operation.
 setfacl -m "u:${TARGET_USER}:rwx" /var/lib/libvirt/images

@@ -123,17 +123,18 @@ be — a Linux process holding a cert and key, calling `kinit`. No Windows clien
 virtual smartcard.
 
 ```
-labhost (Ubuntu 24.04)                    virbr0            pkinit-dc01
+lab host (Ubuntu 24.04)                   virbr0            pkinit-dc01
 ├─ openssl: R, I1, I2, leaves         192.168.122.0/24   Windows Server 2025
 ├─ kinit -X X509_user_identity=…  ─────────────────────▶  AD DS + KDC
-└─ KRB5_CONFIG=lab/krb5.conf                              192.168.122.10
+└─ KRB5_CONFIG=<rendered krb5.conf>                       192.168.122.10
 ```
 
 - Domain `pkinitlab.internal`, realm `PKINITLAB.INTERNAL`, NetBIOS `PKINITLAB`.
   `.internal` is ICANN-reserved for private use. It is synthetic; it is not a real
   forest and must never be pointed at one.
 - The lab `krb5.conf` pins the KDC by address, so no host DNS or `/etc/krb5.conf`
-  changes are needed.
+  changes are needed. `lab/krb5.conf.in` is a template; `lab/03-run-row.sh` renders
+  it with this host's PKI path substituted in.
 - ADCS is **not** installed for this experiment. The CA chain is openssl. ADCS gets
   added later, briefly, only as the Gate 2 fixture source (`../docs/FIXTURES.md`).
 

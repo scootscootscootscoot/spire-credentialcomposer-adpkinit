@@ -1,6 +1,10 @@
-# Lab Kerberos config for the NTAuth chaining experiment. Pins the KDC by
-# address so no host DNS or /etc/krb5.conf changes are needed — invoke with
-# KRB5_CONFIG=lab/krb5.conf. See lab/README.md, "Topology".
+# Lab Kerberos config TEMPLATE for the NTAuth chaining experiment. Pins the KDC
+# by address so no host DNS or /etc/krb5.conf changes are needed.
+#
+# krb5.conf takes absolute paths and performs no variable expansion, so this is
+# a template rather than a usable config: lab/03-run-row.sh renders it to
+# ${PKI_DIR}/krb5.conf with @PKI_DIR@ substituted, and exports KRB5_CONFIG
+# pointing at the result. See lab/README.md, "Topology".
 #
 # pkinit_anchors is the lab root (R) from lab/02-make-ca-chain.sh, not an
 # intermediate — that root/issuer distinction is the client-side mirror of
@@ -37,9 +41,9 @@
 	PKINITLAB.INTERNAL = {
 		kdc = 192.168.122.10
 		admin_server = 192.168.122.10
-		pkinit_anchors = FILE:/home/labop/vms/pki/root/root-ca.crt
-		pkinit_pool = FILE:/home/labop/vms/pki/intermediate1/i1.crt
-		pkinit_pool = FILE:/home/labop/vms/pki/intermediate2/i2.crt
+		pkinit_anchors = FILE:@PKI_DIR@/root/root-ca.crt
+		pkinit_pool = FILE:@PKI_DIR@/intermediate1/i1.crt
+		pkinit_pool = FILE:@PKI_DIR@/intermediate2/i2.crt
 		pkinit_kdc_hostname = dc01.pkinitlab.internal
 	}
 

@@ -118,7 +118,14 @@ LEAF_KEY="${LEAF_DIR}/${LEAF}.key"
 [[ -f ${LEAF_CRT} ]] || die "leaf cert missing: ${LEAF_CRT}"
 [[ -f ${LEAF_KEY} ]] || die "leaf key missing: ${LEAF_KEY}"
 
-[[ -f ${HERE}/krb5.conf ]] || die "${HERE}/krb5.conf missing"
+[[ -f ${HERE}/krb5.conf.in ]] || die "${HERE}/krb5.conf.in missing"
+
+# krb5.conf takes absolute paths and does no variable expansion, so the
+# committed file is a template and the effective config is rendered per run
+# with this operator's PKI_DIR substituted in. Keeps a machine-specific
+# absolute path out of the repository.
+KRB5_CONF="${PKI_DIR}/krb5.conf"
+sed "s|@PKI_DIR@|${PKI_DIR}|g" "${HERE}/krb5.conf.in" >"${KRB5_CONF}"
 
 mkdir -p "${EVIDENCE_DIR}"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -245,13 +252,13 @@ echo "--- kinit ------------------------------------------------------------"
 KINIT_START="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "started at : ${KINIT_START}"
 echo
-echo "\$ KRB5_CONFIG=${HERE}/krb5.conf \\"
+echo "\$ KRB5_CONFIG=${KRB5_CONF} \\"
 echo "  KRB5_TRACE=/dev/stderr ${KINIT} \\"
 echo "    -X X509_user_identity=FILE:${LEAF_CRT},${LEAF_KEY} \\"
 echo "    ${TEST_USER}@${LAB_REALM}"
 echo
 
-export KRB5_CONFIG="${HERE}/krb5.conf"
+export KRB5_CONFIG="${KRB5_CONF}"
 export LD_LIBRARY_PATH="${KRB5_PREFIX}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 "${KDESTROY}" 2>/dev/null || true
 
