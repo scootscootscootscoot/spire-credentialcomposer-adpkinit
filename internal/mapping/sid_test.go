@@ -8,6 +8,10 @@ import (
 func TestValidateSIDString(t *testing.T) {
 	valid := []string{
 		"S-1-5-18",
+		// The canonical example SID from MS-DTYP 2.4.2.1 (SID String Format).
+		// Realistic-looking on purpose: it exercises full 32-bit sub-authority
+		// values, which the all-1s/2s/3s synthetic SIDs elsewhere do not. It is
+		// a published Microsoft vector, not a SID from any real forest.
 		"S-1-5-21-3623811015-3361044348-30300820-1013",
 		"S-1-5-21-0-0-0-4294967295",
 	}
@@ -53,6 +57,7 @@ func TestValidateSIDStringSubAuthorityLimit(t *testing.T) {
 
 func FuzzValidateSIDString(f *testing.F) {
 	f.Add("S-1-5-18")
+	// MS-DTYP 2.4.2.1 example SID; see TestValidateSIDString.
 	f.Add("S-1-5-21-3623811015-3361044348-30300820-1013")
 	f.Add("S-1-0-0")
 	f.Add("")
