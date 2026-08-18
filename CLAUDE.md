@@ -33,9 +33,10 @@ owner's day job. Related-but-separate: a home-lab SPIRE fleet rollout, tracked i
   fixtures must come from a real ADCS-issued cert or authoritative Microsoft test vector,
   and golden tests pin the exact bytes.
 
-**Repo hygiene (pre-public checklist lives here):**
-- Repo is **private until the owner completes an employment-IP review**. Do not make it
-  public, and do not push content anywhere else.
+**Repo hygiene:**
+- Repo is **public** as of 2026-08-17, after the employment-IP review completed. The
+  hygiene rules below are therefore no longer a pre-publication checklist — they are
+  live constraints on every commit, and a mistake is immediately public.
 - No work artifacts ever: no internal doc names/paths/links, no employer name, no real
   AD exports, SIDs from real forests, production certs, or private keys. Fixtures are
   synthetic or sanitized. (`docs/RESEARCH-PLAN.md` was already scrubbed of one internal
@@ -51,9 +52,10 @@ owner's day job. Related-but-separate: a home-lab SPIRE fleet rollout, tracked i
 | 2026-08-12 | Mapping design: plugin consumes a **local mapping snapshot** (versioned, schema-validated, freshness-checked); snapshot *production* is a separate pluggable concern — GitOps pipeline first, AD-attribute sync controller later. See "Mapping architecture". |
 | 2026-08-12 | Phase 4–5 lab: Windows Server eval VM under KVM **on this machine** (`/dev/kvm` verified). ~~Not built yet — do not build before phase 2 exits.~~ **Superseded same day (below).** |
 | 2026-08-12 | Lab built early, by owner decision, scoped to open decision 11 only. The "not before phase 2" gate assumed the lab needed the plugin to be useful; it does not — the NTAuth root-vs-issuer question is a property of AD and is exercised by any two-level openssl chain. Scope is one VM (`lab/`), no ADCS, no SPIRE. Do not let it grow into general phase-4 work before phase 2 exits. |
-| 2026-08-12 | Private GitHub repo until IP review. |
+| 2026-08-12 | Private GitHub repo until IP review. **Superseded 2026-08-17 (below).** |
 | 2026-08-12 | Pins: SPIRE v1.15.2, spire-plugin-sdk v1.15.2, Go 1.26.5. Matches latest SPIRE release and the home-fleet plan. |
 | 2026-08-17 | **Open decision 11 answered: `NTAuthCertificates` requires the direct issuing CA.** A root is neither necessary nor sufficient — a leaf authenticates iff its immediate issuer is published. Seven-row matrix, both controls behaving; see `docs/findings/2026-08-17-ntauth-requires-direct-issuer.md`. The decisive row (rotated issuer under a published root) **fails**, so SPIRE CA rotation costs an AD write plus a replication wait every time, at forest-configuration privilege. The "publish the root once, rotate freely" model does not exist. No composer change can affect this. |
+| 2026-08-17 | **Repository made public**, employment-IP review complete. Published after a full-history scan (no keys, tokens, real SIDs, AD exports, or internal references; the one internal reference was never committed) and a history rewrite removing the workstation hostname and home paths. The remote was deleted and recreated rather than force-pushed, because GitHub keeps force-pushed objects fetchable by SHA. |
 
 ## Mapping architecture (the "massive org" answer)
 
