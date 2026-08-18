@@ -14,8 +14,8 @@ Full research plan with phases, validation matrix, and open decisions:
 `docs/RESEARCH-PLAN.md`. Read it before proposing scope changes.
 
 This is a **spare-time personal project**, developed in parallel with (not as part of) the
-owner's day job. Related-but-separate: the home-lab SPIRE fleet rollout at
-`~/Desktop/spire/PLAN.md` — that fleet is the phase-3 integration target.
+owner's day job. Related-but-separate: a home-lab SPIRE fleet rollout, tracked in its own repository
+— that fleet is the phase-3 integration target.
 
 ## Hard rules (do not relax without explicit owner decision)
 
@@ -83,11 +83,11 @@ internal/encoding/                      phase-1 DER builders (CDP, AD SID ext) +
 docs/RESEARCH-PLAN.md                   the governing research plan
 ```
 
-## Dev environment (this machine, labhost)
+## Dev environment (the owner's workstation)
 
 - Go 1.26.5 at `~/.local/go` (symlinked into `~/.local/bin`, already on PATH).
 - **No docker/podman installed.** Phase 3 SPIRE integration: use the home fleet's SPIRE
-  server (see `~/Desktop/spire/PLAN.md`) or install a container runtime first.
+  server (tracked in its own repository) or install a container runtime first.
 - KVM available for the phase-4 Windows lab; 20 cores / 15G RAM.
 - GitHub: `gh` authed as `scootscootscootscoot` (SSH).
 

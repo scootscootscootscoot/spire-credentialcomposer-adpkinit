@@ -5,7 +5,7 @@ description: Run PowerShell/cmd commands inside the pkinit-dc01 lab VM directly 
 
 # pkinit-lab-shell
 
-Remote-execution channel from the host (`labhost`) into the `pkinit-dc01` Windows
+Remote-execution channel from the lab host into the `pkinit-dc01` Windows
 guest, via `qemu-guest-agent`. Replaces the old workflow of pasting PowerShell
 into a SPICE console window (`virt-viewer`), which silently corrupts any single
 logical line longer than the console's visual width (the pasted text gets a

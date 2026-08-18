@@ -10,7 +10,7 @@ not a hosted page. To reopen it on this machine:
 
 ```
 claude --resume 7f3832b2-c493-4c5e-8c83-d71a9fc32189
-# transcript: ~/.claude/projects/-home-labop-Desktop-spire-credential-helper-plugin/7f3832b2-c493-4c5e-8c83-d71a9fc32189.jsonl
+# transcript: ~/.claude/projects/<this-repo-path-slug>/7f3832b2-c493-4c5e-8c83-d71a9fc32189.jsonl
 ```
 
 The two findings below came from asking a scoping question — "do I need a Windows CA

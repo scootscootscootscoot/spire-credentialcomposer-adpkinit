@@ -164,7 +164,7 @@ None of these were NTAuth. All were real, and all had to be fixed before any row
 run. Recorded so they are not re-discovered:
 
 1. **Client-side chain completion** — `pkinit_pool` entries for `I1` and `I2` in
-   `lab/krb5.conf`. Without them the client fails on its own leaf before sending
+   `lab/krb5.conf.in`. Without them the client fails on its own leaf before sending
    anything.
 2. **`altSecurityIdentities` format** — the strings recorded before this session were
    wrong and had never been exercised. Still only partly resolved; see above.
@@ -180,7 +180,7 @@ run. Recorded so they are not re-discovered:
    AS-REP, which reads like a KDC-side rejection but is entirely client-side. RFC 4556
    wants an `id-pkinit-san` otherName; the lab's openssl-built KDC cert carries a plain
    `dNSName` SAN, which MIT krb5 only accepts when told which hostname to match. Fixed
-   with `pkinit_kdc_hostname` in `lab/krb5.conf`.
+   with `pkinit_kdc_hostname` in `lab/krb5.conf.in`.
 
 A `configure`-time trap worth recording separately: **MIT krb5's `configure` exits 0
 with PKINIT silently disabled** when OpenSSL headers are missing, printing only

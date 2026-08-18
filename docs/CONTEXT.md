@@ -1,6 +1,6 @@
 # Resume point
 
-Parked: 2026-08-17. Host: `labhost`.
+Parked: 2026-08-17.
 
 This is the cold-start file. It records machine state that is *not* recoverable from
 the code or git history, plus the decisions that are already settled so they don't get
@@ -53,7 +53,7 @@ doc. The two worth knowing before touching anything:
   MIT's published fingerprint. **Trap: MIT krb5's `configure` exits 0 with PKINIT
   silently disabled if OpenSSL headers are missing** — it only prints
   `configure: Disabling PKINIT support`. Build deps: `bison libssl-dev pkg-config`.
-- **`lab/krb5.conf` gained `pkinit_kdc_hostname`.** Without it the client rejects the
+- **`lab/krb5.conf.in` gained `pkinit_kdc_hostname`.** Without it the client rejects the
   *KDC's own* cert with `KDC name mismatch` — after the KDC has already accepted the
   client and issued the AS-REP, so it reads like a KDC-side rejection when it is
   entirely client-side.
@@ -98,7 +98,7 @@ This is off the critical path — Gate 2's whole premise is *replacing*
 ## How to run a row
 
 ```bash
-cd /home/labop/Desktop/spire_credential_helper_plugin
+cd /path/to/spire_credential_helper_plugin
 ./lab/03-run-row.sh A            # sets NTAuth to row A's state, then tests
 ./lab/03-run-row.sh A --no-setup # tests against whatever NTAuth holds now
 ```
@@ -135,10 +135,10 @@ unmeasured.
 - **`pkinit-lab-shell` is the standard way to interact with `pkinit-dc01`.** SPICE
   clipboard paste is a known-bad fallback for long lines. See
   `.claude/skills/pkinit-lab-shell/SKILL.md`.
-- None of the lab scripts, `krb5.conf`, evidence transcripts, or
-  `.claude/skills/pkinit-lab-shell/` are git-committed. Whether/when to commit is the
-  owner's call. Note the evidence transcripts contain lab SIDs and hostnames — synthetic,
-  but `CLAUDE.md`'s hygiene rules point at keeping them out regardless.
+- The lab scripts, `lab/krb5.conf.in`, and `.claude/skills/pkinit-lab-shell/` **are**
+  git-committed. The evidence transcripts are **not**, and stay that way: they contain
+  lab SIDs and hostnames — synthetic, but `CLAUDE.md`'s hygiene rules point at keeping
+  them out regardless. They live in `${EVIDENCE_DIR}` (default `~/vms/lab-evidence/`).
 
 ## What this result changes downstream
 
